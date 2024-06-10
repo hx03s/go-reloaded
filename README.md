@@ -12,12 +12,12 @@ Remove spaces around single-quoted words and place the quotes adjacent to the wo
 Replace the word "a" with "an" if the next word starts with a vowel or the letter "h".
 Installation
 Clone the repository:
-git clone https://github.com/your-username/text-editing-tool.git
+git clone https://github.com/hx03s/text-editing-tool.git
 
 
 
 Navigate to the project directory:
-cd text-editing-tool
+cd go-reloaded
 
 
 
