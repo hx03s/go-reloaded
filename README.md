@@ -1,76 +1,73 @@
-This project is a command-line tool written in Go that performs various text modifications on an input file based on specific instructions. The modified text is then written to an output file.
+<div align="center">
 
-Features
-Convert hexadecimal numbers preceded by (hex) to their decimal equivalent.
-Convert binary numbers preceded by (bin) to their decimal equivalent.
-Convert words preceded by (up) to uppercase.
-Convert words preceded by (low) to lowercase.
-Capitalize the first letter of words preceded by (cap).
-Apply uppercase, lowercase, or capitalization to a specified number of words if a number follows the instruction (e.g., (up,3), (low,2), (cap,4)).
-Ensure proper spacing around punctuation marks (., ,, !, ?, :, ;), handling special cases like consecutive punctuation marks.
-Remove spaces around single-quoted words and place the quotes adjacent to the words.
-Replace the word "a" with "an" if the next word starts with a vowel or the letter "h".
-Installation
-Clone the repository:
-git clone https://github.com/hx03s/text-editing-tool.git
+<img src="docs/cover.jpg" alt="go-reloaded" width="100%">
 
+# go-reloaded
 
+**A text auto-corrector in Go: number conversion, case changes, punctuation, quotes and a/an, applied to a whole file.**
 
-Navigate to the project directory:
-cd go-reloaded
+<img src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go"> <img src="https://img.shields.io/badge/CLI-555555?style=for-the-badge" alt="CLI"> <img src="https://img.shields.io/badge/Regex-555555?style=for-the-badge" alt="Regex">
 
+</div>
 
+## Usage
 
-Usage
-To run the program, use the following command:
-
-go run . [input_file] [output_file]
-
-
-
-Replace [input_file] with the path to the input text file and [output_file] with the desired path for the output file.
-
-For example:
-
+```bash
 go run . sample.txt result.txt
+```
 
+The program reads `sample.txt`, applies every rule below, and writes the corrected text to `result.txt`.
 
+## Rules
 
-This command will read the text from sample.txt, apply the specified modifications, and write the modified text to result.txt.
+| Marker / case | Before | After |
+|---|---|---|
+| `(hex)` | `1E (hex) files` | `30 files` |
+| `(bin)` | `10 (bin) years` | `2 years` |
+| `(up)` | `go (up)` | `GO` |
+| `(low)` | `SHOUT (low)` | `shout` |
+| `(cap)` | `bridge (cap)` | `Bridge` |
+| `(up, n)` / `(low, n)` / `(cap, n)` | `so exciting (up, 2)` | `SO EXCITING` |
+| Punctuation `. , ! ? : ;` | `there ,and then BAMM !!` | `there, and then BAMM!!` |
+| Groups like `...` and `!?` | `I was thinking ... You were right` | `I was thinking... You were right` |
+| Single quotes | `' awesome '` | `'awesome'` |
+| a → an before a vowel or h | `a amazing rock` | `an amazing rock` |
 
-Testing
-The project includes a set of test cases to ensure the correctness of the implemented text modifications. To run the tests, use the following command:
+## Examples
 
+```
+Input:  it (cap) was the best of times, it was the worst of times (up) ,
+Output: It was the best of times, it was the worst of TIMES,
+
+Input:  Punctuation tests are ... kinda boring ,don't you think !?
+Output: Punctuation tests are... kinda boring, don't you think!?
+
+Input:  There is no greater agony than bearing a untold story inside you.
+Output: There is no greater agony than bearing an untold story inside you.
+```
+
+## Project structure
+
+```
+main/main.go                  read the input file, run the converters, write the output
+internal/converters/hex.go    (hex) and (bin) to decimal
+internal/converters/ulan.go   (up), (low), (cap) with optional counts
+internal/converters/punc.go   punctuation and quote spacing
+internal/converters/vowel.go  a → an
+```
+
+## Tests
+
+```bash
 go test ./...
+```
 
+Built at **[Reboot01](https://reboot01.com)**, Bahrain.
 
+---
 
-This command will execute all the test files in the project and its subpackages.
+<div align="center">
 
-You can also create your own test cases by adding new files with the naming convention *_test.go in the appropriate package directories.
+Built by **Hasan Abdulla** · [github.com/hx03s](https://github.com/hx03s) · Bahrain 🇧🇭
 
-Example Test Cases
-Here are some example test cases to verify the functionality of the text modifications:
-
-Hexadecimal and Binary Conversion:
-
-Input: "Simply add 42 (hex) and 10 (bin) and you will see the result is 68."
-Expected Output: "Simply add 66 and 2 and you will see the result is 68."
-Uppercase, Lowercase, and Capitalization:
-
-Input: "it (cap) was the best of times, it was the worst of times (up) , it was the age of wisdom, it was the age of foolishness (cap, 6) , it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of darkness, it was the spring of hope, IT WAS THE (low, 3) winter of despair."
-Expected Output: "It was the best of times, it was the worst of TIMES, it was the age of wisdom, It Was The Age Of Foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of darkness, it was the spring of hope, it was the winter of despair."
-Punctuation and Quotes:
-
-Input: "Punctuation tests are ... kinda boring ,don't you think !?"
-Expected Output: "Punctuation tests are... kinda boring, don't you think!?"
-Input: "As Elton John said: ' I am the most well-known homosexual in the world '"
-Expected Output: "As Elton John said: 'I am the most well-known homosexual in the world'"
-Vowel Replacement:
-
-Input: "There is no greater agony than bearing a untold story inside you."
-Expected Output: "There is no greater agony than bearing an untold story inside you."
-Feel free to add more test cases to cover additional scenarios and edge cases.
-
-Contributing
-Contributions to this project are welcome. If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+</div>
